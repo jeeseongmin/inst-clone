@@ -1,51 +1,47 @@
-import React from "react";
+import { collection, onSnapshot, orderBy, query } from "@firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { db } from "../firebase";
 import Post from "./Post";
 
-const posts = [
-  {
-    id: "123",
-    username: "person",
-    userImg:
-      "https://cdn.pixabay.com/photo/2014/07/09/10/04/man-388104_960_720.jpg",
-    img: "https://cdn.pixabay.com/photo/2014/07/09/10/04/man-388104_960_720.jpg",
-    caption: "SUBSCRIBE AND DESTROY THE LIKE BUTTON for the YT algorithm!",
-  },
-  {
-    id: "123",
-    username: "person",
-    userImg:
-      "https://cdn.pixabay.com/photo/2014/07/09/10/04/man-388104_960_720.jpg",
-    img: "https://cdn.pixabay.com/photo/2014/07/09/10/04/man-388104_960_720.jpg",
-    caption: "SUBSCRIBE AND DESTROY THE LIKE BUTTON for the YT algorithm!",
-  },
-  {
-    id: "123",
-    username: "person",
-    userImg:
-      "https://cdn.pixabay.com/photo/2014/07/09/10/04/man-388104_960_720.jpg",
-    img: "https://cdn.pixabay.com/photo/2014/07/09/10/04/man-388104_960_720.jpg",
-    caption: "SUBSCRIBE AND DESTROY THE LIKE BUTTON for the YT algorithm!",
-  },
-];
 function Posts() {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(
+    () =>
+      onSnapshot(
+        query(collection(db, "posts"), orderBy("timestamp", "desc")),
+        (snapshot) => {
+          console.log("fetch data");
+          setPosts(snapshot.docs);
+        }
+      ),
+    [db]
+  );
+
+  useEffect(() => {
+    console.log("useEffect");
+
+    return () => console.log("cleanup Function");
+  }, []);
+
+  useEffect(() => {
+    console.log("haha");
+  });
+
+  console.log(posts);
+
   return (
     <div>
       {posts.map((post) => (
         <Post
           key={post.id}
           id={post.id}
-          username={post.username}
-          userImg={post.userImg}
-          img={post.img}
-          caption={post.caption}
+          username={post.data().username}
+          userImg={post.data().profileImg}
+          img={post.data().image}
+          caption={post.data().caption}
         />
       ))}
-      {/* Post */}
-      {/* Post */}
-      {/* Post */}
-      {/* Post */}
-      {/* Post */}
-      {/* Post */}
     </div>
   );
 }

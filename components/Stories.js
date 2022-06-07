@@ -1,8 +1,11 @@
 // import faker from "faker";
 import faker from "faker";
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import Story from "./Story";
+
 function Stories() {
+  const { data: session } = useSession();
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
@@ -10,13 +13,16 @@ function Stories() {
       ...faker.helpers.contextualCard(),
       id: i,
     }));
-    console.log(_suggestions);
 
     setSuggestions(_suggestions);
   }, []);
 
   return (
     <div className='flex p-6 mt-8 space-x-2 overflow-x-scroll bg-white border border-gray-200 rounded-sm scrollbar-thin scrollbar-thumb-black '>
+      {session && (
+        <Story img={session.user.image} username={session.user.username} />
+      )}
+
       {suggestions.map((profile) => {
         return (
           <Story
