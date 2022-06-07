@@ -11,24 +11,11 @@ function Posts() {
       onSnapshot(
         query(collection(db, "posts"), orderBy("timestamp", "desc")),
         (snapshot) => {
-          console.log("fetch data");
           setPosts(snapshot.docs);
         }
       ),
     [db]
   );
-
-  useEffect(() => {
-    console.log("useEffect");
-
-    return () => console.log("cleanup Function");
-  }, []);
-
-  useEffect(() => {
-    console.log("haha");
-  });
-
-  console.log(posts);
 
   return (
     <div>
