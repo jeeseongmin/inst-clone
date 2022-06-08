@@ -32,5 +32,4 @@ yarn-error.log*
 .vercel
 
 # firebase
-firebase.js
 .env
